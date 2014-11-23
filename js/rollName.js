@@ -1,4 +1,5 @@
 var isRun = true;
+
 function range(start, end) {
     var foo = [];
     for (var i = start; i <= end; i++) {
@@ -6,9 +7,46 @@ function range(start, end) {
     }
     return foo;
 }
-var a = range(1, 150);
+
+
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie =cname+"=" + cvalue+"; "+expires;
+}
+
+function getCookie(cname) {
+    var name = cname+"=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(cname) != -1){
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "fuck";
+}
+
+function checkCookie() {
+    var number = getCookie("number");
+    if (number == "fuck") {
+        number = prompt("请输入随机的数量:", "");
+        setCookie("number", number, 30);
+        return number;
+    } else {
+        return number;
+    }
+}
+
+//check cookie exits
+var nub=checkCookie();
+
+console.log(nub);
+
+var a = range(1, nub);
 // var a = ["张三", "李四", "王五", "赵六"];
-var a2 = new Array();
 
 function action(str) {
     var s = document.getElementById("bt").value;
@@ -26,16 +64,11 @@ function run() {
     var i = Math.floor(Math.random() * a.length + 1) - 1;
     document.getElementById("show").innerHTML = a[i];
     if (isRun == false) {
-        var b = true;
-        for (var j in a2) {
-            if (a2[j] == i) {
-                b = false;
-            }
-        }
-        if (b) {
-            a2[a2.length] = i;
-            return;
-        }
+        return;
     }
     setTimeout("run()", 10);
+}
+
+var toType = function(obj) {
+  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
